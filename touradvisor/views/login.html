@@ -1,0 +1,11 @@
+<div class="content">
+    <form name="LoginForm" ng-submit="sendMessage()" novalidate>
+        <input type="text" placeholder="Username" name="name" ng-model="login.name" ng-required="true"/>
+        <div ng-show="LoginForm.name.$touched && LoginForm.name.$invalid">
+            <small style="color: red; display: block; text-align:center;">Enter a valid Name</small>    
+        </div>
+        
+        <input type="password" placeholder="Password" name="password" ng-model="register.password" ng-required="true"/>
+        <input type="submit" value="Login" ng-disabled="LoginForm.email.$invalid"/>
+    </form>
+</div>

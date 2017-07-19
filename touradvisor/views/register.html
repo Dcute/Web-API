@@ -1,0 +1,14 @@
+<div class="content">
+    <form name="RegistrationForm" ng-submit="sendMessage()" action="/new" method="POST" novalidate>
+        <input type="text" placeholder="Username" name="name" ng-model="register.name" ng-required="true"/>
+        <div ng-show="RegistrationForm.name.$touched && RegistrationForm.name.$invalid">
+            <small style="color: red; display: block; text-align:center;">Enter a valid Name</small>    
+        </div>
+        <input type="email" placeholder="Email Address" name="email" ng-model="register.email" ng-required="true"/>
+        <div ng-show="RegistrationForm.email.$touched && RegistrationForm.email.$invalid">
+            <small style="color: red; display: block; text-align:center;">Enter a valid Email</small>    
+        </div>
+        <input type="password" placeholder="Password" name="password" ng-model="register.password" ng-required="true"/>
+        <input type="submit" value="Register" ng-disabled="RegistrationForm.email.$invalid"/>
+    </form>
+</div>

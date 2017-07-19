@@ -1,0 +1,242 @@
+var touradvisor = angular.module('touradvisor', ['ngRoute', 'ngAnimate']);
+
+touradvisor.config(['$routeProvider', function($routeProvider){
+    
+    $routeProvider
+    .when('/home', {
+        templateUrl:'views/home.html',
+        controller:'Tourcontroller'
+    })
+    .when('/mapapi', {
+        templateUrl:'views/mapapi.html',
+        controller:'Tourcontroller'
+    })
+     .when('/login', {
+        templateUrl:'views/login.html',
+        controller:'LoginController'
+    })
+     .when('/login-success', {
+        templateUrl:'views/login-success.html',
+        controller:'LoginController'
+    })
+     .when('/register', {
+        templateUrl:'views/register.html',
+        controller:'RegistrationController'
+    })
+     .when('/register-success', {
+        templateUrl:'views/register-success.html',
+        controller:'RegistrationController'
+    })
+    .when('/directory',{
+        templateUrl:'views/directory.html',
+        controller:'Tourcontroller'
+    }).otherwise({
+        redirectTo:'/home'
+    });
+    
+}]);
+
+ 
+touradvisor.controller('Tourcontroller', ['$scope', '$http', function($scope, $http){
+}]);
+
+touradvisor.controller('LoginController', ['$scope', '$location', function($scope, $location){
+    $scope.sendMessage = function(){
+        $location.path('login-success');
+    }
+}]);
+
+
+touradvisor.controller('RegistrationController', ['$scope', '$location', function($scope, $location){
+    $scope.sendMessage = function(){
+        $location.path('register-success');
+    }
+}]);
+
+
+/* Map API */
+touradvisor.service('Map', function($q) {
+    
+    this.init = function() {
+        var options = {
+            center: new google.maps.LatLng(40.7127837, -74.00594130000002),
+            zoom: 13,
+            disableDefaultUI: true    
+        }
+        this.map = new google.maps.Map(
+            document.getElementById("map"), options
+        );
+        this.places = new google.maps.places.PlacesService(this.map);
+    }
+    
+    this.search = function(str) {
+        var d = $q.defer();
+        this.places.textSearch({query: str}, function(results, status) {
+            if (status == 'OK') {
+                d.resolve(results[0]);
+            }
+            else d.reject(status);
+        });
+        return d.promise;
+    }
+    
+    this.addMarker = function(res) {
+        if(this.marker) this.marker.setMap(null);
+        this.marker = new google.maps.Marker({
+            map: this.map,
+            position: res.geometry.location,
+            animation: google.maps.Animation.DROP
+        });
+        this.map.setCenter(res.geometry.location);
+    }
+    
+});
+
+touradvisor.controller('newPlaceCtrl', function($scope, Map) {
+    
+    $scope.place = {};
+    
+    $scope.search = function() {
+        $scope.apiError = false;
+        Map.search($scope.searchPlace)
+        .then(
+            function(res) { // success
+                Map.addMarker(res);
+                $scope.place.name = res.name;
+                $scope.place.lat = res.geometry.location.lat();
+                $scope.place.lng = res.geometry.location.lng();
+            },
+            function(status) { // error
+                $scope.apiError = true;
+                $scope.apiStatus = status;
+            }
+        );
+    }
+    
+    $scope.send = function() {
+        alert($scope.place.name + ' : ' + $scope.place.lat + ', ' + $scope.place.lng);    
+    }
+    
+    Map.init();
+});
+var touradvisor = angular.module('touradvisor', ['ngRoute', 'ngAnimate']);
+
+touradvisor.config(['$routeProvider', function($routeProvider){
+    
+    $routeProvider
+    .when('/home', {
+        templateUrl:'views/home.html',
+        controller:'Tourcontroller'
+    })
+    .when('/mapapi', {
+        templateUrl:'views/mapapi.html',
+        controller:'Tourcontroller'
+    })
+     .when('/login', {
+        templateUrl:'views/login.html',
+        controller:'LoginController'
+    })
+     .when('/login-success', {
+        templateUrl:'views/login-success.html',
+        controller:'LoginController'
+    })
+     .when('/register', {
+        templateUrl:'views/register.html',
+        controller:'RegistrationController'
+    })
+     .when('/register-success', {
+        templateUrl:'views/register-success.html',
+        controller:'RegistrationController'
+    })
+    .when('/directory',{
+        templateUrl:'views/directory.html',
+        controller:'Tourcontroller'
+    }).otherwise({
+        redirectTo:'/home'
+    });
+    
+}]);
+
+ 
+touradvisor.controller('Tourcontroller', ['$scope', '$http', function($scope, $http){
+}]);
+
+touradvisor.controller('LoginController', ['$scope', '$location', function($scope, $location){
+    $scope.sendMessage = function(){
+        $location.path('login-success');
+    }
+}]);
+
+
+touradvisor.controller('RegistrationController', ['$scope', '$location', function($scope, $location){
+    $scope.sendMessage = function(){
+        $location.path('register-success');
+    }
+}]);
+
+
+/* Map API */
+touradvisor.service('Map', function($q) {
+    
+    this.init = function() {
+        var options = {
+            center: new google.maps.LatLng(40.7127837, -74.00594130000002),
+            zoom: 13,
+            disableDefaultUI: true    
+        }
+        this.map = new google.maps.Map(
+            document.getElementById("map"), options
+        );
+        this.places = new google.maps.places.PlacesService(this.map);
+    }
+    
+    this.search = function(str) {
+        var d = $q.defer();
+        this.places.textSearch({query: str}, function(results, status) {
+            if (status == 'OK') {
+                d.resolve(results[0]);
+            }
+            else d.reject(status);
+        });
+        return d.promise;
+    }
+    
+    this.addMarker = function(res) {
+        if(this.marker) this.marker.setMap(null);
+        this.marker = new google.maps.Marker({
+            map: this.map,
+            position: res.geometry.location,
+            animation: google.maps.Animation.DROP
+        });
+        this.map.setCenter(res.geometry.location);
+    }
+    
+});
+
+touradvisor.controller('newPlaceCtrl', function($scope, Map) {
+    
+    $scope.place = {};
+    
+    $scope.search = function() {
+        $scope.apiError = false;
+        Map.search($scope.searchPlace)
+        .then(
+            function(res) { // success
+                Map.addMarker(res);
+                $scope.place.name = res.name;
+                $scope.place.lat = res.geometry.location.lat();
+                $scope.place.lng = res.geometry.location.lng();
+            },
+            function(status) { // error
+                $scope.apiError = true;
+                $scope.apiStatus = status;
+            }
+        );
+    }
+    
+    $scope.send = function() {
+        alert($scope.place.name + ' : ' + $scope.place.lat + ', ' + $scope.place.lng);    
+    }
+    
+    Map.init();
+});
